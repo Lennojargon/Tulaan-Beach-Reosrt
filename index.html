@@ -1,0 +1,366 @@
+<html><head><base href="." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuya Jerome's Beach Resort - Luxury Booking</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.header {
+    background: #1a1a1a;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.hero-section {
+    height: 400px;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                url('https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=1600&h=900') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.booking-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.btn {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #34495e;
+}
+
+.room-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.room-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+}
+
+.room-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-info {
+    padding: 1.5rem;
+}
+
+.room-price {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.currency {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.availability {
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.available {
+    background: #2ecc71;
+    color: white;
+}
+
+.unavailable {
+    background: #e74c3c;
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+</style>
+</head>
+<body>
+    <header class="header">
+        <h1>Welcome to Kuya Jerome's Beach Resort</h1>
+    </header>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <p>Experience Luxury by the Beach</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <form class="booking-form" id="bookingForm">
+            <div class="form-group">
+                <label for="checkIn">Check-in Date</label>
+                <input type="date" id="checkIn" required>
+            </div>
+            <div class="form-group">
+                <label for="checkOut">Check-out Date</label>
+                <input type="date" id="checkOut" required>
+            </div>
+            <div class="form-group">
+                <label for="guests">Number of Guests</label>
+                <select id="guests" required>
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="4">4 Guests</option>
+                    <option value="10">10 Guests</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Check Availability</button>
+        </form>
+
+        <div class="room-list" id="roomList">
+            <!-- Rooms will be dynamically inserted here -->
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rooms = [
+        {
+            id: 1,
+            name: 'Deluxe Room',
+            price: 1000,
+            capacity: 4,
+            available: true,
+            description: 'Luxurious room with breakfast included and native-inspired design',
+            images: [
+                'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600',
+                'https://images.unsplash.com/photo-1631049421450-348ccd7f8949?w=800&h=600',
+                'https://images.unsplash.com/photo-1631049552057-403cdb8f0658?w=800&h=600'
+            ]
+        },
+        {
+            id: 2,
+            name: 'Family Room',
+            price: 3999,
+            capacity: 10,
+            available: true,
+            description: 'Spacious family room perfect for large groups',
+            images: [
+                'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600',
+                'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800&h=600',
+                'https://images.unsplash.com/photo-1598928636135-d146006ff4be?w=800&h=600'
+            ]
+        },
+        {
+            id: 3,
+            name: 'Barkadahan Room',
+            price: 10000,
+            capacity: 10,
+            available: true,
+            description: 'Ultimate group experience with premium amenities',
+            images: [
+                'https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&h=600',
+                'https://images.unsplash.com/photo-1590490359683-658d3d23f972?w=800&h=600',
+                'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600'
+            ]
+        }
+    ];
+
+    const bookingForm = document.getElementById('bookingForm');
+    const roomList = document.getElementById('roomList');
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        }).format(amount);
+    }
+
+    function displayRooms(filteredRooms = rooms) {
+        roomList.innerHTML = '';
+        filteredRooms.forEach(room => {
+            const roomCard = document.createElement('div');
+            roomCard.className = 'room-card fade-in';
+
+            const imagesHTML = room.images.map((img, index) => `
+                <img src="${img}" 
+                     alt="${room.name} - View ${index + 1} - luxury hotel room" 
+                     width="300" 
+                     height="200" 
+                     style="display: ${index === 0 ? 'block' : 'none'}"
+                     class="room-image-${room.id}-${index}">
+            `).join('');
+
+            const navigationHTML = `
+                <div class="image-navigation" style="text-align: center; padding: 10px;">
+                    ${room.images.map((_, index) => `
+                        <button onclick="changeImage(${room.id}, ${index})" 
+                                class="nav-dot" 
+                                style="width: 10px; height: 10px; border-radius: 50%; margin: 0 5px; background: ${index === 0 ? '#2c3e50' : '#ddd'}; border: none; cursor: pointer;">
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            roomCard.innerHTML = `
+                <div class="room-image" style="position: relative;">
+                    ${imagesHTML}
+                    ${navigationHTML}
+                </div>
+                <div class="room-info">
+                    <h3>${room.name}</h3>
+                    <p>${room.description}</p>
+                    <p class="room-price">${formatCurrency(room.price)} <span class="currency">per night</span></p>
+                    <p>Maximum capacity: ${room.capacity} guests</p>
+                    <div class="availability ${room.available ? 'available' : 'unavailable'}">
+                        ${room.available ? 'Available' : 'Not Available'}
+                    </div>
+                    ${room.available ? `<button onclick="bookRoom(${room.id})" class="btn" style="width: 100%; margin-top: 1rem;">Book Now</button>` : ''}
+                </div>
+            `;
+            roomList.appendChild(roomCard);
+        });
+    }
+
+    bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const checkIn = new Date(document.getElementById('checkIn').value);
+        const checkOut = new Date(document.getElementById('checkOut').value);
+        const guests = parseInt(document.getElementById('guests').value);
+
+        const filteredRooms = rooms.filter(room => room.capacity >= guests);
+        displayRooms(filteredRooms);
+    });
+
+    displayRooms();
+
+    window.rooms = rooms;
+    window.displayRooms = displayRooms;
+    window.formatCurrency = formatCurrency;
+});
+
+function changeImage(roomId, imageIndex) {
+    const room = rooms.find(r => r.id === roomId);
+    if (room) {
+        room.images.forEach((_, index) => {
+            const image = document.querySelector(`.room-image-${roomId}-${index}`);
+            const dot = image.parentElement.nextElementSibling.children[index];
+            if (index === imageIndex) {
+                image.style.display = 'block';
+                dot.style.background = '#2c3e50';
+            } else {
+                image.style.display = 'none';
+                dot.style.background = '#ddd';
+            }
+        });
+    }
+}
+
+function bookRoom(roomId) {
+    const checkIn = document.getElementById('checkIn').value;
+    const checkOut = document.getElementById('checkOut').value;
+    
+    if (!checkIn || !checkOut) {
+        alert('Please select check-in and check-out dates first!');
+        return;
+    }
+
+    const room = rooms.find(r => r.id === roomId);
+    if (room) {
+        const confirmation = confirm(`
+            Confirm booking for ${room.name}?
+            Check-in: ${checkIn}
+            Check-out: ${checkOut}
+            Total: ${formatCurrency(room.price)} per night
+        `);
+
+        if (confirmation) {
+            alert('Booking confirmed! Thank you for choosing our hotel.');
+            room.available = false;
+            displayRooms();
+        }
+    }
+}
+</script>
+</body></html>
